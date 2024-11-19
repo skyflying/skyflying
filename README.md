@@ -3,7 +3,7 @@
 ***
 
 Welcome to my profile , I hope the studies I present will be helpful to you and hope you can give me more knowledge.
-Master's in Marine geology and Geophysics and Bacholr of Geomatic, special in GIS, reomote sensing, gps and spatial data analysis.
+Master's in Marine Geology and Geophysics, also Bachelor of Geomatic, special in GIS, reomote sensing, gps and spatial data analysis.
 
 With 10+ years of experience in geospatial data processing, GIS database management, data analysis, seabed investigations, machine learning for spatial data, and GIS software development. Now, I have been working on various global offshore wind projects for GIS and geospatial data analysis. Scope on supporting GIS, survey (geophysical, hydrograhpy and remote sensing) solution, the maintenance of GIS databases and WebGIS.
 
