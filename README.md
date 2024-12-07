@@ -11,9 +11,12 @@ Before 2022, I had worked in the Ministry of Interior(Taiwan) for spatial data p
 
 
 ### Certifications
+1. Coursera
 - [Machine Learning](https://www.coursera.org/account/accomplishments/verify/WJFFNPZA6PNV)
 - [Google Data Analytics](https://www.coursera.org/account/accomplishments/specialization/certificate/669QRJ6JWVHF)
 - [Neural Networks and Deep Learning](https://coursera.org/share/fc3828dc44486897436455eda8a47620)
+2. Udemy
+- [Machine Learning A-Z](https://udemy-certificate.s3.amazonaws.com/image/UC-845c26aa-aaf8-48d3-8822-c227d7e1268b.jpg)
 
 ### Achivement
 - 2nd ML 100Days
