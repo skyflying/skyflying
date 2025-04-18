@@ -1,4 +1,4 @@
-![UC-c56dbf58-8cc9-4086-8eb2-1a022fd8468a](https://github.com/user-attachments/assets/263a2cce-dd02-4f40-9de2-90e609c20f35)## Hi there, I am Mingyi Hsu (Ming). 
+## Hi there, I am Mingyi Hsu (Ming). 
 
 ***
 
