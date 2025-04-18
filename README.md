@@ -1,4 +1,4 @@
-## Hi there, I am Mingyi Hsu (Ming). 
+![UC-c56dbf58-8cc9-4086-8eb2-1a022fd8468a](https://github.com/user-attachments/assets/263a2cce-dd02-4f40-9de2-90e609c20f35)## Hi there, I am Mingyi Hsu (Ming). 
 
 ***
 
@@ -17,6 +17,7 @@ Before 2022, I had worked in the Ministry of Interior(Taiwan) for spatial data p
 - [Neural Networks and Deep Learning](https://coursera.org/share/fc3828dc44486897436455eda8a47620)
 2. Udemy
 - [Machine Learning A-Z](https://udemy-certificate.s3.amazonaws.com/image/UC-845c26aa-aaf8-48d3-8822-c227d7e1268b.jpg)
+- [SAA C03, Solutions Architect AssociateZ](https://udemy-certificate.s3.amazonaws.com/image/UC-c56dbf58-8cc9-4086-8eb2-1a022fd8468a.jpg)
 
 ### Achivement
 - 2nd ML 100Days
