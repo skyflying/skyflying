@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Cinematic Flowing Nebula</title>
+<title>Ultra Performance Flow Nebula</title>
 <style>
 body { margin:0; overflow:hidden; background:black; }
 </style>
@@ -11,12 +11,10 @@ body { margin:0; overflow:hidden; background:black; }
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.146.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.146.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.146.0/examples/js/loaders/PLYLoader.js"></script>
 
 <script>
 
-let scene, camera, renderer, controls;
-let nebula;
+let scene, camera, renderer, controls, nebula;
 let clock = new THREE.Clock();
 
 init();
@@ -25,110 +23,118 @@ animate();
 function init(){
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000);
-
-    camera = new THREE.PerspectiveCamera(
-        60,
-        window.innerWidth/window.innerHeight,
-        0.1,
-        100
-    );
+    camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 100);
     camera.position.set(0,0,4);
 
     renderer = new THREE.WebGLRenderer({antialias:true});
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(innerWidth, innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-    const loader = new THREE.PLYLoader();
+    // ===== GPU GENERATED POINT CLOUD =====
 
-    loader.load('nebula_cinematic_RGBA_1M.ply', function(geometry){
+    const COUNT = 300000;
 
-        geometry.computeBoundingSphere();
+    const positions = new Float32Array(COUNT * 3);
+    const colors = new Float32Array(COUNT * 3);
 
-        const material = new THREE.ShaderMaterial({
+    for(let i=0;i<COUNT;i++){
 
-            transparent:true,
-            depthWrite:false,
-            blending:THREE.AdditiveBlending,
-            vertexColors:true,
+        let r = Math.pow(Math.random(), 0.6);
+        let theta = Math.random() * Math.PI * 2;
+        let phi = Math.acos(2*Math.random()-1);
 
-            uniforms:{
-                time:{value:0},
-                pointSize:{value:12.0}
-            },
+        let x = r * Math.sin(phi) * Math.cos(theta);
+        let y = r * Math.sin(phi) * Math.sin(theta);
+        let z = r * Math.cos(phi);
 
-            vertexShader:`
+        positions[i*3] = x*1.5;
+        positions[i*3+1] = y*1.0;
+        positions[i*3+2] = z*0.6;
 
-                uniform float time;
-                uniform float pointSize;
-                attribute vec3 color;
-                varying vec3 vColor;
+        // Cinematic color
+        colors[i*3]   = 1.0;
+        colors[i*3+1] = 0.3 + r*0.4;
+        colors[i*3+2] = 0.1;
+    }
 
-                void main(){
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors,3));
 
-                    vColor = color;
+    const material = new THREE.ShaderMaterial({
 
-                    vec3 pos = position;
+        transparent:true,
+        depthWrite:false,
+        blending:THREE.AdditiveBlending,
+        vertexColors:true,
 
-                    float flow = sin(pos.x*3.0 + time*0.5)
-                               + cos(pos.y*2.5 + time*0.4)
-                               + sin(pos.z*2.0 + time*0.6);
+        uniforms:{
+            time:{value:0},
+            size:{value:8.0}
+        },
 
-                    pos += normalize(pos) * flow * 0.03;
+        vertexShader:`
 
-                    vec4 mvPosition = modelViewMatrix * vec4(pos,1.0);
+            uniform float time;
+            uniform float size;
+            varying vec3 vColor;
 
-                    gl_PointSize = pointSize * (300.0 / -mvPosition.z);
+            float noise(vec3 p){
+                return sin(p.x*3.0 + time)
+                     + cos(p.y*2.0 + time*0.8)
+                     + sin(p.z*4.0 + time*0.5);
+            }
 
-                    gl_Position = projectionMatrix * mvPosition;
-                }
-            `,
+            void main(){
 
-            fragmentShader:`
+                vColor = color;
 
-                varying vec3 vColor;
+                vec3 pos = position;
 
-                void main(){
+                float n = noise(pos);
+                pos += normalize(pos) * n * 0.05;
 
-                    float dist = length(gl_PointCoord - vec2(0.5));
+                vec4 mvPosition = modelViewMatrix * vec4(pos,1.0);
+                gl_PointSize = size * (300.0 / -mvPosition.z);
+                gl_Position = projectionMatrix * mvPosition;
+            }
+        `,
 
-                    float alpha = smoothstep(0.5, 0.0, dist);
+        fragmentShader:`
 
-                    gl_FragColor = vec4(vColor, alpha);
-                }
-            `
-        });
+            varying vec3 vColor;
 
-        nebula = new THREE.Points(geometry, material);
-        scene.add(nebula);
-
+            void main(){
+                float dist = length(gl_PointCoord - vec2(0.5));
+                float alpha = smoothstep(0.5, 0.0, dist);
+                gl_FragColor = vec4(vColor, alpha);
+            }
+        `
     });
+
+    nebula = new THREE.Points(geometry, material);
+    scene.add(nebula);
 
     window.addEventListener('resize', onResize);
 }
 
 function animate(){
-
     requestAnimationFrame(animate);
 
-    let delta = clock.getElapsedTime();
-
-    if(nebula){
-        nebula.material.uniforms.time.value = delta;
-    }
+    let t = clock.getElapsedTime();
+    nebula.material.uniforms.time.value = t;
 
     controls.update();
     renderer.render(scene, camera);
 }
 
 function onResize(){
-
-    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.aspect = innerWidth/innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(innerWidth, innerHeight);
 }
 
 </script>
