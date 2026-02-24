@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Nebula</title>
+<title>Cinematic Nebula</title>
 <style>
 body { margin:0; overflow:hidden; background:black; }
 </style>
@@ -11,18 +11,23 @@ body { margin:0; overflow:hidden; background:black; }
 
 <script type="module">
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-import { PLYLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/PLYLoader.js';
+import * as THREE from 'https://cdn.skypack.dev/three@0.160.0';
+import { OrbitControls } from 'https://cdn.skypack.dev/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import { PLYLoader } from 'https://cdn.skypack.dev/three@0.160.0/examples/jsm/loaders/PLYLoader.js';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
-const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(
+    60,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    100
+);
 camera.position.set(0,0,4);
 
 const renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(innerWidth, innerHeight);
+renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
