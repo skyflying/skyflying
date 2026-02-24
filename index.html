@@ -2,58 +2,55 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Nebula</title>
+<title>Nebula Stable</title>
 <style>
 body { margin:0; overflow:hidden; background:black; }
 </style>
-
-<!-- 🔥 關鍵：import map -->
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
-  }
-}
-</script>
-
 </head>
 <body>
 
-<script type="module">
+<script src="https://cdn.jsdelivr.net/npm/three@0.146.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.146.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.146.0/examples/js/loaders/PLYLoader.js"></script>
 
-import * as THREE from 'three';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-import { PLYLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/PLYLoader.js';
+<script>
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
-const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(
+    60,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    100
+);
 camera.position.set(0,0,4);
 
 const renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(innerWidth, innerHeight);
+renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-const controls = new OrbitControls(camera, renderer.domElement);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-const loader = new PLYLoader();
+const loader = new THREE.PLYLoader();
 
-loader.load('./nebula_cinematic_RGBA_1M.ply', (geometry)=>{
+loader.load(
+    'nebula_cinematic_RGBA_1M.ply',
+    function(geometry){
 
-    const material = new THREE.PointsMaterial({
-        size:0.02,
-        vertexColors:true,
-        transparent:true,
-        opacity:0.9,
-        blending:THREE.AdditiveBlending,
-        depthWrite:false
-    });
+        const material = new THREE.PointsMaterial({
+            size:0.02,
+            vertexColors:true,
+            transparent:true,
+            opacity:0.9,
+            blending:THREE.AdditiveBlending,
+            depthWrite:false
+        });
 
-    const points = new THREE.Points(geometry, material);
-    scene.add(points);
-
-});
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
+    }
+);
 
 function animate(){
     requestAnimationFrame(animate);
